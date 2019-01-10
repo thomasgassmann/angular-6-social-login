@@ -9,7 +9,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
   public loginProviderObj: LoginProviderClass = new LoginProviderClass();
   private auth2: any;
 
-  constructor(private clientId: string) {
+  constructor(private clientId: string, private uxMode: 'redirect' | 'popup' = 'popup', private redirectUri: string = undefined) {
     super();
     this.loginProviderObj.id = clientId;
     this.loginProviderObj.name = 'google';
@@ -22,7 +22,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
           gapi.load('auth2', () => {
             this.auth2 = gapi.auth2.init({
               client_id: this.clientId,
-              scope: 'email'
+              scope: 'email',
+              ux_mode: this.uxMode,
+              redirect_uri: this.redirectUri
             });
 
             this.auth2.then(() => {
